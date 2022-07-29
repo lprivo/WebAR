@@ -1,0 +1,26 @@
+{
+  "name": "privo-uk-web-ar",
+  "description": "Testing Web AR applications",
+  "version": "1.0.0",
+  "author": "Laszlo Privoczki",
+  "dependencies": {
+    "@ar-js-org/ar.js" :"^3.4.0"
+  },
+  "keywords": [
+    "webar"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "",
+    "develop": "",
+    "format": "prettier --write '**/*.js'",
+    "test": ""
+  },
+  "devDependencies": {
+    "prettier": "^1.19.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lprivo/WebAR"
+  }
+}
