@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>WebAR.js demo</title>
     <link rel="stylesheet" href="./src/styles/cameraButton.css">
+    <link rel="stylesheet" href="./src/styles/takePhotoCanvas.css">
     <!-- <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script> -->
     <script src="./src/external/aframe.min.js"></script>
     <!-- <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script> -->
@@ -12,19 +13,14 @@
     <!-- <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script> -->
     <script src="./src/external/aframe-ar-nft.js"></script>
     <script src="./src/scripts/takePhoto.js"></script>
-    <script>
-      function takeScreenShot () {
-        document.querySelector('a-scene').components.screenshot.capture('perspective');
-        console.log("ScreenShot taken");
-      }
-    </script>
   </head>
 
   <body>
-    <div class="camera-button" onclick="takeScreenShot()">
+    <div class="camera-button" onclick="onTakePhotoButtonClick()">
       <div class="circle"></div>
       <div class="ring"></div>
     </div>
+    <canvas id="takePhotoCanvas"></canvas>
     <a-scene
       vr-mode-ui="enabled: false" 
       arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"

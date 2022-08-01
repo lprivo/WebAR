@@ -1,0 +1,10 @@
+#takePhotoCanvas {
+    width: 20%;
+    height: 200px;
+    top: 75%;
+    left: 80%;
+    margin-top: -50px;
+    margin-left: -50px;
+    position: absolute;
+    z-index: 1;
+}
