@@ -4,38 +4,178 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>WebAR.js demo</title>
-    <link rel="stylesheet" href="./src/styles/cameraButton.css">
-    <link rel="stylesheet" href="./src/styles/takePhotoCanvas.css">
-    <!-- <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script> -->
-    <script src="./src/external/aframe.min.js"></script>
+    <link rel="stylesheet" href="./src/styles/cameraButton.css" />
+    <link rel="stylesheet" href="./src/styles/takePhotoCanvas.css" />
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <!-- <script src="./src/external/aframe.min.js"></script> -->
     <!-- <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script> -->
-    <script src="./src/external/aframe-look-at-component.min.js"></script>
+    <!-- <script src="./src/external/aframe-look-at-component.min.js"></script> -->
     <!-- <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script> -->
-    <script src="./src/external/aframe-ar-nft.js"></script>
-    <script src="./src/scripts/takePhoto.js"></script>
+    <!-- <script src="./src/external/aframe-ar-nft.js"></script> -->
+    <!-- <script src="./src/scripts/takePhoto.js"></script> -->
+    <script src="./src/scripts/utils.js"></script>
+    <script src="./src/scripts/videoControls.js"></script>
+    <script>
+      AFRAME.registerComponent("playpausevideo", {
+        init: function() {
+          // this.onClick = this.onClick.bind(this);
+          console.log("📮 ~ : playpausevideo called");
+          const video = document.getElementById("videoFireworks");
+          console.log("📮 ~ : playpausevideo -> video", video);
+          this.el.addEventListener("click", function() {
+            if (video.hasAttribute("autoplay")) {
+              video.removeAttribute("autoplay");
+            }
+
+            if (video.paused || video.ended) {
+              video.play();
+            } else {
+              video.pause();
+            }
+          });
+        }
+      });
+      AFRAME.registerComponent("triggervideobyorientation", {
+        init: function() {
+          // this.onClick = this.onClick.bind(this);
+          // const camera = document.getElementById("camera");
+          const camera = this.el;
+          console.log("📮 ~ : triggervideobyorientation -> camera", this);
+
+          const worldPos = new THREE.Vector3();
+          worldPos.setFromMatrixPosition(camera.object3D.matrixWorld);
+          console.log("📮 ~ : camera worldPos", worldPos);
+          console.log(worldPos.x);
+
+          camera.addEventListener("rotation", function() {
+            if (video.hasAttribute("autoplay")) {
+              video.removeAttribute("autoplay");
+            }
+
+            if (video.paused || video.ended) {
+              video.play();
+            } else {
+              video.pause();
+            }
+          });
+        }
+      });
+
+      AFRAME.registerComponent("camera-listener", {
+        tick: function() {
+          var cameraEl = this.el.sceneEl.camera.el;
+          const position = cameraEl.getAttribute("position");
+          const rotation = cameraEl.getAttribute("rotation");
+          console.log("📮 ~ : camera-listener - rotation", rotation);
+
+          const video1 = document.getElementById("videoFireworks");
+          const video2 = document.getElementById("videoBunny");
+
+          if (rotation.y > 15 && rotation.y < 45) {
+            video1.play();
+          } else if (rotation.y < -15 && rotation.y > -45) {
+            video2.play();
+          } else {
+            video1.pause();
+            video2.pause();
+          }
+        }
+      });
+    </script>
   </head>
 
-  <body>
-    <div class="camera-button" onclick="onTakePhotoButtonClick()">
+  <body style="background-color: aqua;">
+    <canvas id="takePhotoCanvas"></canvas>
+    <!-- <div class="playbutton" onclick="playPauseVideo()">
       <div class="circle"></div>
       <div class="ring"></div>
-    </div>
-    <canvas id="takePhotoCanvas"></canvas>
+    </div> -->
     <a-scene
-      vr-mode-ui="enabled: false" 
-      arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+      vr-mode-ui="enabled: false"
+      arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: true;"
     >
-        <a-entity
+      <a-assets>
+        <video
+          id="videoBunny"
+          preload="auto"
+          src="https://cdn.aframe.io/videos/bunny.mp4"
+          width="160"
+          height="90"
+          crossorigin="anonymous"
+          muted
+        ></video>
+        <!-- <video
+            id="aerlogo"
+          preload="auto"
+          src="./assets/AER_Logo_animation.mp4"
+          width="160"
+          height="90"
+          crossorigin="anonymous"
+          muted
+          controls
+          ></video> -->
+        <video
+          class="videoscreen"
+          id="videoFireworks"
+          preload="auto"
+          src="https://cdn.aframe.io/videos/fireworks.mp4"
+          width="160"
+          height="90"
+          crossorigin="anonymous"
+          muted
+        ></video>
+        <!-- <img
+          src="./assets/Play_Button_final.svg"
+          id="playbutton"
+          alt="play button"
+          class="playbutton"
+        /> -->
+      </a-assets>
+      <!-- <a-entity
         gltf-model="./src/models/bee/scene.gltf"
         scale="5 5 5"
         position="-100 0 -100"
-        ></a-entity>
-      <!-- <a-text
-        value="Hello World, Hello People!"
-        look-at="[gps-camera]"
-        scale="100 100 100"
-      ></a-text> -->
-      <a-camera gps-camera rotation-reader> </a-camera>
+        ></a-entity> -->
+      <!-- <a-entity
+        material="src: #videoBunny"
+        geometry="primitive: plane; width: 16; height: 9"
+        position="10 0 -15"
+        width="16"
+        height="9"
+        rotation="0 -25 0"
+        visible="true"
+      >
+      </a-entity> -->
+      <a-video
+        src="#videoBunny"
+        position="10 0 -15"
+        width="16"
+        height="9"
+        rotation="0 -25 0"
+        playpausevideo
+      ></a-video>
+      <a-video
+        src="#videoFireworks"
+        position="-10 0 -15"
+        width="16"
+        height="9"
+        rotation="0 25 0"
+        playpausevideo
+      ></a-video>
+      <!-- ><a-image src="#playbutton" playpausevideo position="0 0 2"> </a-image -->
+      <!-- <a-camera gps-camera rotation-reader> </a-camera> -->
+      <a-camera
+        id="camera"
+        camera="active: true; spectator: false;"
+        gps-camera
+        look-controls="pointerLockEnabled:false"
+        movement-controls="controls: checkpoint;"
+        checkpoint-controls="mode: animate; animateSpeed: 10"
+        camera-listener
+      >
+      </a-camera>
     </a-scene>
   </body>
 </html>
+
+<!-- wasd-controls="enabled: false;" -->

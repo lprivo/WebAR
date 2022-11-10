@@ -1,0 +1,13 @@
+.videoscreen {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+}
+.playbutton {
+  display: block;
+  z-index: 1;
+  bottom: -100px;
+  left: 0;
+  width: 100px;
+  height: 100px;
+}
