@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "author": "Laszlo Privoczki",
   "dependencies": {
-    "@ar-js-org/ar.js" :"^3.4.0"
+    "@ar-js-org/ar.js": "^3.4.0",
+    "aframe-extras": "^6.1.1"
   },
   "keywords": [
     "webar"

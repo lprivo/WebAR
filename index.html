@@ -4,38 +4,92 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>WebAR.js demo</title>
-    <link rel="stylesheet" href="./src/styles/cameraButton.css">
-    <link rel="stylesheet" href="./src/styles/takePhotoCanvas.css">
-    <!-- <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script> -->
-    <script src="./src/external/aframe.min.js"></script>
-    <!-- <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script> -->
-    <script src="./src/external/aframe-look-at-component.min.js"></script>
-    <!-- <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script> -->
-    <script src="./src/external/aframe-ar-nft.js"></script>
-    <script src="./src/scripts/takePhoto.js"></script>
+    <link rel="stylesheet" href="./src/styles/cameraButton.css" />
+    <link rel="stylesheet" href="./src/styles/takePhotoCanvas.css" />
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <!-- <script src="./src/external/aframe.min.js"></script> -->
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    <!-- <script src="./src/external/aframe-look-at-component.min.js"></script> -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <!-- <script src="./src/external/aframe-ar-nft.js"></script> -->
+    <!-- <script src="./src/scripts/takePhoto.js"></script> -->
+    <!-- <script src="./src/scripts/utils.js"></script>
+    <script src="./src/scripts/videoControls.js"></script> -->
+    <script>
+      AFRAME.registerComponent("camera-listener", {
+        tick: function() {
+          var cameraEl = this.el.sceneEl.camera.el;
+          const position = cameraEl.getAttribute("position");
+          const rotation = cameraEl.getAttribute("rotation");
+
+          const video1 = document.getElementById("video1");
+          const video2 = document.getElementById("video2");
+
+          if (rotation.y > 15 && rotation.y < 45) {
+            video1.play();
+          } else if (rotation.y < -15 && rotation.y > -45) {
+            video2.play();
+          } else {
+            video1.pause();
+            video2.pause();
+          }
+        }
+      });
+    </script>
   </head>
 
-  <body>
-    <div class="camera-button" onclick="onTakePhotoButtonClick()">
-      <div class="circle"></div>
-      <div class="ring"></div>
-    </div>
+  <body style="background-color: aqua;">
     <canvas id="takePhotoCanvas"></canvas>
     <a-scene
-      vr-mode-ui="enabled: false" 
-      arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+      vr-mode-ui="enabled: false"
+      arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: true;"
     >
-        <a-entity
-        gltf-model="./src/models/bee/scene.gltf"
-        scale="5 5 5"
-        position="-100 0 -100"
-        ></a-entity>
-      <!-- <a-text
-        value="Hello World, Hello People!"
-        look-at="[gps-camera]"
-        scale="100 100 100"
-      ></a-text> -->
-      <a-camera gps-camera rotation-reader> </a-camera>
+      <a-assets>
+        <!-- src="https://cdn.aframe.io/videos/fireworks.mp4" -->
+        <!-- src="https://aerstudios.co.uk/wp-content/uploads/2022/10/as_aer_brandfilm.mp4" -->
+        <video
+          id="video1"
+          preload="auto"
+          src="https://res.cloudinary.com/djk3bcn8p/video/upload/v1668073592/as_aer_brandfilm_otnbpe.mp4"
+          width="160"
+          height="90"
+          crossorigin="anonymous"
+        ></video>
+        <!-- src="https://cdn.aframe.io/videos/bunny.mp4" -->
+        <!-- src="https://aerstudios.co.uk/wp-content/uploads/2022/10/AER_PC_LowRes_02.mp4" -->
+        <video
+          id="video2"
+          preload="auto"
+          src="https://res.cloudinary.com/djk3bcn8p/video/upload/v1668073591/AER_PC_LowRes_02_zucua5.mp4"
+          width="160"
+          height="90"
+          crossorigin="anonymous"
+        ></video>
+      </a-assets>
+      <a-video
+        src="#video1"
+        position="-10 0 -15"
+        width="16"
+        height="9"
+        rotation="0 25 0"
+      ></a-video>
+      <a-video
+        src="#video2"
+        position="10 0 -15"
+        width="16"
+        height="9"
+        rotation="0 -25 0"
+      ></a-video>
+      <a-camera
+        id="camera"
+        camera="active: true; spectator: false;"
+        gps-camera
+        look-controls="pointerLockEnabled:false"
+        movement-controls="controls: checkpoint;"
+        checkpoint-controls="mode: animate; animateSpeed: 10"
+        camera-listener
+      >
+      </a-camera>
     </a-scene>
   </body>
 </html>
